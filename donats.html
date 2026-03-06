@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galaxy Core — Магазин привилегий</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-overlay: rgba(10, 1, 24, 0.88);
+            --glass: rgba(20, 10, 35, 0.94);
+            --main-purple: #9d50bb;
+            --mc-red: #ff5555;
+            --mc-gray: #aaaaaa;
+            --price-gold: #ffaa00;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(var(--bg-overlay), var(--bg-overlay)), 
+                        url('../static/images/bg.png') no-repeat center center fixed;
+            background-size: cover;
+            color: #ffffff;
+            margin: 0; padding: 0;
+            min-height: 100vh;
+        }
+
+        .back-home {
+            position: fixed; top: 20px; left: 20px; z-index: 1000;
+            text-decoration: none; color: white;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 12px 20px; border-radius: 12px;
+            font-size: 0.8rem; border: 1px solid rgba(157, 80, 187, 0.4);
+            backdrop-filter: blur(10px); transition: 0.3s;
+            display: flex; align-items: center; gap: 8px;
+        }
+
+        .back-home:hover { background: rgba(157, 80, 187, 0.2); transform: translateX(5px); }
+
+        header {
+            padding: 60px 20px; text-align: center;
+            backdrop-filter: blur(5px); border-bottom: 2px solid var(--main-purple);
+            margin-bottom: 50px;
+        }
+
+        header h1 {
+            font-family: 'Press Start 2P', cursive; font-size: 2.8rem; margin: 0;
+            background: linear-gradient(to bottom, #fff, var(--main-purple));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+
+        .user-tag { margin-top: 15px; font-family: 'Press Start 2P', cursive; font-size: 0.7rem; color: #55ffff; }
+
+        .shop-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px; max-width: 1400px;
+            margin: 0 auto; padding: 0 20px 80px 20px;
+        }
+
+        .rank-card {
+            background: var(--glass); border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px; padding: 20px; display: flex; flex-direction: column;
+            transition: 0.3s; backdrop-filter: blur(10px);
+        }
+
+        .rank-card:hover { transform: translateY(-5px); border-color: var(--main-purple); }
+
+        .rank-title { font-family: 'Press Start 2P', cursive; font-size: 0.8rem; text-align: center; margin-bottom: 20px; }
+        .mc-lore { font-size: 0.8rem; line-height: 1.6; flex-grow: 1; }
+        .cmd { color: var(--mc-red); font-weight: bold; }
+        .white { color: #fff; display: block; margin-bottom: 5px; font-weight: 600; }
+        .section-title { display: block; margin: 10px 0 5px 0; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px; }
+
+        .price-tag {
+            text-align: center;
+            font-size: 1.2rem;
+            color: var(--price-gold);
+            font-weight: 600;
+            margin-top: 15px;
+        }
+
+        .buy-button {
+            display: block; background: linear-gradient(135deg, #6e248f, #9d50bb);
+            color: white; text-decoration: none; text-align: center;
+            padding: 12px; border-radius: 10px; font-weight: 600; margin-top: 15px;
+            transition: 0.3s;
+        }
+        .buy-button:hover { filter: brightness(1.2); box-shadow: 0 0 15px var(--main-purple); }
+
+        .c-1 { color: #ffff55; } .c-2 { color: #55ff55; } .c-3 { color: #55ff55; text-shadow: 1px 1px #00aaaa; }
+        .c-4 { color: #ff5555; text-shadow: 1px 1px #ffaa00; } .c-5 { color: #55ffff; text-shadow: 1px 1px #ffff55; }
+        .c-6 { color: #55ffff; } .c-7 { color: #aa00aa; } .c-8 { color: #5555ff; }
+        .c-9 { color: #aaaaaa; } .c-10 { color: #aa00aa; text-shadow: 1px 1px #5500ff; }
+        .c-11 { color: #ff5555; text-shadow: 1px 1px #ffaa00; }
+    </style>
+</head>
+<body>
+
+<a href="/mainstorige" class="back-home">🏠 На главную</a>
+
+<header>
+    <h1>GALAXY CORE</h1>
+    <div id="player-display" class="user-tag"></div>
+</header>
+
+<div class="shop-container">
+    <div class="rank-card">
+        <div class="rank-title c-1">MERCURY</div>
+        <div class="mc-lore"><span class="white">Особенности:</span><span class="cmd">➤</span> /kit mercury<br><span class="cmd">➤</span> /salary<br><span class="section-title">Лимиты:</span>Домов: 2 | Регионы: 3</div>
+        <div class="price-tag">0.3 USD</div>
+        <a href="/success_buy?item=mercury&name=Mercury&price=0.3" class="buy-button" onclick="saveOrder('MERCURY', '0.3')">Купить</a>
+    </div>
+
+    <div class="rank-card">
+        <div class="rank-title c-2">VENUS</div>
+        <div class="mc-lore"><span class="white">Особенности:</span><span class="cmd">➤</span> /food<br><span class="cmd">➤</span> /loom<br><span class="section-title">Лимиты:</span>Домов: 2 | Регионы: 3</div>
+        <div class="price-tag">0.6 USD</div>
+        <a href="/success_buy?item=venus&name=venus&price=0.6" class="buy-button" onclick="saveOrder('VENUS', '0.6')">Купить</a>
+    </div>
+
+    <div class="rank-card">
+        <div class="rank-title c-3">EARTH</div>
+        <div class="mc-lore"><span class="white">Особенности:</span><span class="cmd">➤</span> /top<br><span class="cmd">➤</span> /hat<br><span class="section-title">Лимиты:</span>Домов: 2 | Регионы: 4</div>
+        <div class="price-tag">1.0 USD</div>
+        <a href="/success_buy?item=earth&name=earth&price=1.0" class="buy-button" onclick="saveOrder('EARTH', '1.0')">Купить</a>
+    </div>
+
+    <div class="rank-card">
+        <div class="rank-title c-4">MARS</div>
+        <div class="mc-lore"><span class="white">Особенности:</span><span class="cmd">➤</span> /heal<br><span class="cmd">➤</span> /feed<br><span class="section-title">Лимиты:</span>Домов: 2 | Регионы: 4</div>
+        <div class="price-tag">2.0 USD</div>
+        <a href="/success_buy?item=mars&name=mars&price=2.0" class="buy-button" onclick="saveOrder('MARS', '2.0')">Купить</a>
+    </div>
+
+    <div class="rank-card">
+        <div class="rank-title c-5">JUPITER</div>
+        <div class="mc-lore"><span class="white">Особенности:</span><span class="cmd">➤</span> /back<br><span class="cmd">➤</span> /ec<br><span class="section-title">Лимиты:</span>Домов: 3 | Регионы: 5</div>
+        <div class="price-tag">3.8 USD</div>
+        <a href="/success_buy?item=jupiter&name=jupiter&price=3.8" class="buy-button" onclick="saveOrder('JUPITER', '3.8')">Купить</a>
+    </div>
+
+    <div class="rank-card">
+        <div class="rank-title c-6">SATURN</div>
+        <div class="mc-lore"><span class="white">Особенности:</span><span class="cmd">➤</span> /ext<br><span class="cmd">➤</span> /heal Ник<br><span class="section-title">Лимиты:</span>Домов: 3 | Регионы: 6</div>
+        <div class="price-tag">5.23 USD</div>
+        <a href="/success_buy?item=saturn&name=saturn&price=5.23" class="buy-button" onclick="saveOrder('SATURN', '5.23')">Купить</a>
+    </div>
+
+    <div class="rank-card">
+        <div class="rank-title c-7">URANIUM</div>
+        <div class="mc-lore"><span class="white">Особенности:</span><span class="cmd">➤</span> /time<br><span class="cmd">➤</span> /repair<br><span class="section-title">Лимиты:</span>Домов: 3 | Регионы: 7</div>
+        <div class="price-tag">8.51 USD</div>
+        <a href="/success_buy?item=uranium&name=uranium&price=8.51" class="buy-button" onclick="saveOrder('URANIUM', '8.51')">Купить</a>
+    </div>
+
+    <div class="rank-card">
+        <div class="rank-title c-8">NEPTUNE</div>
+        <div class="mc-lore"><span class="white">Особенности:</span><span class="cmd">➤</span> /jump<br><span class="cmd">➤</span> /setwarp<br><span class="section-title">Лимиты:</span>Домов: 5 | Регионы: 9</div>
+        <div class="price-tag">12.0 USD</div>
+        <a href="/success_buy?item=neptune&name=neptune&price=12.0" class="buy-button" onclick="saveOrder('NEPTUNE', '12.0')">Купить</a>
+    </div>
+
+    <div class="rank-card">
+        <div class="rank-title c-9">BLACKHOLE</div>
+        <div class="mc-lore"><span class="white">Особенности:</span><span class="cmd">➤</span> /invsee<br><span class="cmd">➤</span> /near<br><span class="section-title">Лимиты:</span>Домов: 5 | Регионы: 9</div>
+        <div class="price-tag">15.0 USD</div>
+        <a href="/success_buy?item=blackhole&name=blackhole&price=15.0" class="buy-button" onclick="saveOrder('BLACKHOLE', '15.0')">Купить</a>
+    </div>
+
+    <div class="rank-card">
+        <div class="rank-title c-10">GALAXY</div>
+        <div class="mc-lore"><span class="white">Особенности:</span><span class="cmd">➤</span> /fly<br><span class="cmd">➤</span> /speed<br><span class="section-title">Лимиты:</span>Домов: 7 | Регионы: 10</div>
+        <div class="price-tag">21.0 USD</div>
+        <a href="/success_buy?item=galaxy&name=galaxy&price=21.0" class="buy-button" onclick="saveOrder('GALAXY', '21.0')">Купить</a>
+    </div>
+
+    <div class="rank-card" style="border-color: gold;">
+        <div class="rank-title c-11">ANDROMEDA</div>
+        <div class="mc-lore"><span class="white">Особенности:</span><span class="cmd">➤</span> /kit infinity<br><span class="cmd">➤</span> /enchant<br><span class="section-title">Лимиты:</span>Домов: 10 | Регионы: 15</div>
+        <div class="price-tag">30.4 USD</div>
+        <a href="/success_buy?item=andromeda&name=andromeda&price=30.4" class="buy-button" style="background: linear-gradient(to right, #ff5555, #ffaa00);" onclick="saveOrder('ANDROMEDA', '30.4')">Купить</a>
+    </div>
+</div>
+
+<script>
+    function saveOrder(name, price) {
+        localStorage.setItem('selectedItem', name);
+        localStorage.setItem('selectedPrice', price);
+    }
+
+    window.onload = function() {
+        const nick = localStorage.getItem('playerNick');
+        document.getElementById('player-display').innerText = nick ? "ПРИВЕТ, " + nick.toUpperCase() : "ГОСТЬ";
+    };
+</script>
+</body>
+</html>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galaxy Core — Вход</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Press+Start+2P&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-overlay: rgba(15, 5, 25, 0.8);
+            --main-purple: #9d50bb;
+            --error-red: #ff4d4d;
+            --accent-cyan: #00d2ff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: white;
+            overflow: hidden;
+        }
+
+        .hero {
+            height: 100vh;
+            background: linear-gradient(var(--bg-overlay), var(--bg-overlay)),
+                        url('../static/images/bg.png') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-family: 'Press Start 2P', cursive;
+            font-size: clamp(1.5rem, 5vw, 3rem);
+            margin-bottom: 40px;
+            background: linear-gradient(to bottom, #fff, var(--accent-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 15px rgba(0, 210, 255, 0.5);
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+            max-width: 350px;
+            margin-bottom: 20px;
+        }
+
+        .form-group input {
+            padding: 15px;
+            border-radius: 12px;
+            border: 2px solid rgba(0, 210, 255, 0.3);
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            font-size: 1rem;
+            text-align: center;
+            outline: none;
+            backdrop-filter: blur(10px);
+            transition: 0.3s;
+        }
+
+        .form-group input:focus {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.4);
+        }
+
+        .form-group input.invalid {
+            border-color: var(--error-red);
+        }
+
+        #error-message {
+            color: var(--error-red);
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+            height: 20px;
+            font-weight: 600;
+        }
+
+        .btn {
+            padding: 16px 35px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            min-width: 200px;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            background: linear-gradient(135deg, #9d50bb, #6e48aa);
+            box-shadow: 0 5px 15px rgba(157, 80, 187, 0.4);
+            transition: 0.3s;
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            filter: brightness(1.2);
+            box-shadow: 0 8px 20px rgba(157, 80, 187, 0.6);
+        }
+    </style>
+</head>
+<body>
+
+<div class="hero">
+    <h1>LOGIN</h1>
+
+    <div class="form-group">
+        <input type="email" id="login-email" placeholder="Электронная почта">
+        <input type="password" id="login-pass" placeholder="Пароль">
+    </div>
+
+    <div id="error-message"></div>
+
+    <button class="btn" onclick="handleLogin('mainstorige.html')">Войти</button>
+</div>
+
+<script>
+function handleLogin() {
+    const emailInput = document.getElementById('login-email');
+    const passInput = document.getElementById('login-pass');
+    const errorDiv = document.getElementById('error-message');
+
+    // Сброс состояния
+    errorDiv.textContent = '';
+    emailInput.classList.remove('invalid');
+    passInput.classList.remove('invalid');
+
+    const emailValue = emailInput.value.trim();
+    const passValue = passInput.value;
+
+    // Валидация (оставляем твою проверку)
+    if (!emailValue || !passValue) {
+        errorDiv.textContent = 'Введите почту и пароль';
+        return;
+    }
+
+    // --- ОТПРАВКА ДАННЫХ НА СЕРВЕР ---
+    fetch('/login', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            email: emailValue,
+            password: passValue
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            alert('Добро пожаловать, ' + data.nickname + '!');
+            window.location.href = '/mainstorige'; // Куда кидаем после входа
+        } else {
+            errorDiv.textContent = data.message;
+            emailInput.classList.add('invalid');
+            passInput.classList.add('invalid');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        errorDiv.textContent = 'Ошибка сервера. Попробуйте позже.';
+    });
+}
+</script>
+
+</body>
+</html>

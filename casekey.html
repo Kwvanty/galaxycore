@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galaxy Core — Покупка Планеток</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Press+Start+2P&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-overlay: rgba(5, 10, 25, 0.92);
+            --glass: rgba(15, 30, 60, 0.95);
+            --planet-blue: #00d2ff;
+            --planet-cyan: #3a7bd5;
+            --mc-gold: #ffaa00;
+            --premium-purple: #a333ff;
+            --cheap-green: #55ff55;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(var(--bg-overlay), var(--bg-overlay)),
+                        url('../static/images/bg.png') no-repeat center center fixed;
+            background-size: cover;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        .back-home {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            text-decoration: none;
+            color: white;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            border: 1px solid var(--planet-blue);
+            backdrop-filter: blur(10px);
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-home:hover {
+            background: rgba(0, 210, 255, 0.2);
+            transform: translateX(5px);
+        }
+
+        header {
+            padding: 60px 20px;
+            text-align: center;
+            backdrop-filter: blur(5px);
+            border-bottom: 2px solid var(--planet-blue);
+            margin-bottom: 50px;
+        }
+
+        header h1 {
+            font-family: 'Press Start 2P', cursive;
+            font-size: clamp(1.5rem, 5vw, 2.2rem);
+            margin: 0;
+            background: linear-gradient(to bottom, #fff, var(--planet-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 15px rgba(0, 210, 255, 0.5);
+        }
+
+        .user-tag {
+            margin-top: 15px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.7rem;
+            color: #55ffff;
+        }
+
+        .shop-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px 80px 20px;
+        }
+
+        /* БАЗОВАЯ КАРТОЧКА */
+
+        .currency-card {
+            background: var(--glass);
+            border: 2px solid rgba(0, 210, 255, 0.2);
+            border-radius: 25px;
+            padding: 30px 15px;
+            width: 260px;
+            text-align: center;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            backdrop-filter: blur(15px);
+            position: relative;
+        }
+
+        .currency-card:hover {
+            transform: translateY(-10px);
+        }
+
+        /* ===== 1 РЯД (СИНИЙ) ===== */
+
+        .row-1 {
+            border-color: var(--planet-blue);
+        }
+
+        .row-1:hover {
+            box-shadow: 0 15px 40px rgba(0, 210, 255, 0.3);
+        }
+
+        .row-1 .buy-button {
+            background: linear-gradient(135deg, var(--planet-cyan), var(--planet-blue));
+        }
+
+        /* ===== 2 РЯД (РОЗОВО-ФИОЛЕТОВЫЙ) ===== */
+
+        .row-2 {
+            border-color: #d400ff;
+        }
+
+        .row-2:hover {
+            box-shadow: 0 15px 40px rgba(212, 0, 255, 0.35);
+        }
+
+        .row-2 .buy-button {
+            background: linear-gradient(135deg, #ff00cc, #6a00ff);
+        }
+
+        /* ===== 3 РЯД (ОРАНЖЕВО-КРАСНЫЙ) ===== */
+
+        .row-3 {
+            border-color: #ff3c00;
+        }
+
+        .row-3:hover {
+            box-shadow: 0 15px 40px rgba(255, 60, 0, 0.35);
+        }
+
+        .row-3 .buy-button {
+            background: linear-gradient(135deg, #ff8c00, #ff0000);
+        }
+
+        /* Общие элементы */
+
+        .icon {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .amount {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 1rem;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .sub-text,
+        .case {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .price-tag {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--mc-gold);
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .buy-button {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: 0.3s;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+        }
+
+        .buy-button:hover {
+            filter: brightness(1.2);
+        }
+
+        /* Бейджики */
+
+        .badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 0.55rem;
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 5px;
+        }
+
+        .badge-new { background: var(--cheap-green); color: black; }
+        .badge-pop { background: var(--mc-gold); color: black; }
+        .badge-elite { background: var(--premium-purple); color: white; }
+
+    </style>
+</head>
+
+<body>
+
+<a href="/mainstorige" class="back-home">🏠 На главную</a>
+
+<header>
+    <h1>GALAXY PLANETS</h1>
+    <div id="player-display" class="user-tag"></div>
+</header>
+
+<div class="shop-container">
+
+    <div class="currency-card row-1">
+        <span class="badge badge-elite">ELITE</span>
+        <span class="icon">🗝️</span>
+        <span class="amount">1</span>
+        <span class="sub-text">Ключ</span>
+        <span class="case">ОТ ДОНАТ КЕЙСА</span>
+        <span class="price-tag">1000 планеток</span>
+        <a href="/success_buy_case?item=default&amount=1&price=1000&name=1+Донат+Кейс" class="buy-button">Купить</a>
+    </div>
+
+    <div class="currency-card row-1">
+        <span class="badge badge-pop">POPULAR</span>
+        <span class="icon">🗝️🪐</span>
+        <span class="amount">1</span>
+        <span class="sub-text">Ключ</span>
+        <span class="case">ОТ КЕЙСА С ПЛАНЕТКАМИ</span>
+        <span class="price-tag">1000 планеток</span>
+        <a href="/success_buy_case?item=planets&amount=1&price=1000&name=1+Кейс+с+планетками" class="buy-button">Купить</a>
+    </div>
+
+    <div class="currency-card row-1">
+        <span class="badge badge-new">START</span>
+        <span class="icon">🔑🪙</span>
+        <span class="amount">1</span>
+        <span class="sub-text">Ключ</span>
+        <span class="case">ОТ КЕЙСА С МОНЕТКАМИ</span>
+        <span class="price-tag">69 планеток</span>
+        <a href="/success_buy_case?item=coins&amount=1&price=69&name=1+Кейс+с+монетками" class="buy-button">Купить</a>
+    </div>
+
+    <div class="currency-card row-1">
+        <span class="icon">🔑⛏️</span>
+        <span class="amount">1</span>
+        <span class="sub-text">Ключ</span>
+        <span class="case">ОТ КЕЙСА С ДОНАТ-ПРЕДМЕТОМ</span>
+        <span class="price-tag">90 USD</span>
+        <a href="/success_buy_case?item=items&amount=1&price=90&name=1+Кейс+с+предметом" class="buy-button">Купить</a>
+    </div>
+
+    <div class="currency-card row-2">
+        <span class="icon">🗝️</span>
+        <span class="amount">5</span>
+        <span class="sub-text">Ключей</span>
+        <span class="case">ДОНАТ КЕЙС</span>
+        <span class="price-tag">4700 Планет</span>
+        <a href="/success_buy_case?item=default&amount=5&price=4700&name=5+Донат+Кейсов" class="buy-button">Купить</a>
+    </div>
+
+    <div class="currency-card row-2">
+        <span class="icon">🗝️🪐</span>
+        <span class="amount">5</span>
+        <span class="sub-text">Ключей</span>
+        <span class="case">ПЛАНЕТКИ</span>
+        <span class="price-tag">4700 Планеток</span>
+        <a href="/success_buy_case?item=planets&amount=5&price=4700&name=5+Кейсов+с+планетками" class="buy-button">Купить</a>
+    </div>
+
+    <div class="currency-card row-2">
+        <span class="icon">🔑🪙</span>
+        <span class="amount">5</span>
+        <span class="sub-text">Ключей</span>
+        <span class="case">МОНЕТКИ</span>
+        <span class="price-tag">335 Планеток</span>
+        <a href="/success_buy_case?item=coins&amount=5&price=335&name=5+Кейсов+с+монетками" class="buy-button">Купить</a>
+    </div>
+
+    <div class="currency-card row-2">
+        <span class="icon">🔑⛏️</span>
+        <span class="amount">5</span>
+        <span class="sub-text">Ключей</span>
+        <span class="case">ДОНАТ-ПРЕДМЕТ</span>
+        <span class="price-tag">420 Планеток</span>
+        <a href="/success_buy_case?item=items&amount=5&price=420&name=5+Кейсов+с+предметом" class="buy-button">Купить</a>
+    </div>
+
+    <div class="currency-card row-3">
+        <span class="icon">🗝️</span>
+        <span class="amount">10</span>
+        <span class="sub-text">Ключей</span>
+        <span class="case">ДОНАТ КЕЙС</span>
+        <span class="price-tag">9200 Планеток</span>
+        <a href="/success_buy_case?item=default&amount=10&price=9200&name=10+Донат+Кейсов" class="buy-button">Купить</a>
+    </div>
+
+    <div class="currency-card row-3">
+        <span class="icon">🗝️🪐</span>
+        <span class="amount">10</span>
+        <span class="sub-text">Ключей</span>
+        <span class="case">ПЛАНЕТКИ</span>
+        <span class="price-tag">9200 Планеток</span>
+        <a href="/success_buy_case?item=planets&amount=10&price=9200&name=10+Кейсов+с+планетками" class="buy-button">Купить</a>
+    </div>
+
+    <div class="currency-card row-3">
+        <span class="icon">🔑🪙</span>
+        <span class="amount">10</span>
+        <span class="sub-text">Ключей</span>
+        <span class="case">МОНЕТКИ</span>
+        <span class="price-tag">650 Планеток</span>
+        <a href="/success_buy_case?item=coins&amount=10&price=650&name=10+Кейсов+с+монетками" class="buy-button">Купить</a>
+    </div>
+
+    <div class="currency-card row-3">
+        <span class="icon">🔑⛏️</span>
+        <span class="amount">10</span>
+        <span class="sub-text">Ключей</span>
+        <span class="case">ДОНАТ-ПРЕДМЕТ</span>
+        <span class="price-tag">850 Планеток</span>
+        <a href="/success_buy_case?item=items&amount=10&price=850&name=10+Кейсов+с+предметом" class="buy-button">Купить</a>
+    </div>
+
+</div>
+
+<script>
+    window.onload = function() {
+        const nick = localStorage.getItem('playerNick');
+        document.getElementById('player-display').innerText =
+            nick ? "КЛЮЧИ ДЛЯ: " + nick.toUpperCase() : "ГОСТЬ ГАЛАКТИКИ";
+    };
+</script>
+
+</body>
+</html>
