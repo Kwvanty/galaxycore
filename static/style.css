@@ -1,0 +1,166 @@
+:root {
+    --bg-color: #0a0118;
+    --main-purple: #9d50bb;
+    --dark-purple: #6e248f;
+    --light-purple: #e0b0ff;
+    --crystal-glow: rgba(163, 80, 235, 0.5);
+    --text-color: #f0e6ff;
+    --accent-gold: #ffcc00;
+    --glass-bg: rgba(255, 255, 255, 0.03);
+}
+
+/* 1. Базовые настройки экрана */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    overflow: hidden; /* Запрещаем обычный скролл */
+    font-family: 'Poppins', sans-serif;
+    background: var(--bg-color);
+    color: var(--text-color);
+}
+
+/* 2. Главный контейнер-обертка */
+.main-wrapper {
+    height: 100vh;
+    width: 100%;
+    position: relative;
+    /* Плавность перехода: 0.8 сек, cubic-bezier для премиального эффекта скольжения */
+    transition: transform 0.8s cubic-bezier(0.85, 0, 0.15, 1);
+}
+
+/* Состояния смещения (Управление через JS классы) */
+.main-wrapper.show-info {
+    transform: translateY(-100vh);
+}
+
+.main-wrapper.show-exchange {
+    transform: translateY(-200vh);
+}
+
+/* 3. Общий стиль для полноэкранных секций */
+.page-section {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    position: relative;
+    background-size: cover !important;
+    background-position: center center !important;
+    background-repeat: no-repeat !important;
+}
+
+/* --- СЕКЦИЯ 1: МАГАЗИН (bg.png) --- */
+.shop-section {
+    background: radial-gradient(circle at center, rgba(30, 0, 60, 0.4) 0%, var(--bg-color) 70%),
+                url('../static/images/bg.png');
+}
+
+/* Контейнер кнопок перехода внизу первой секции */
+.nav-pills {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+
+/* --- СЕКЦИЯ 2: ИНФОРМАЦИЯ (bg2.png) --- */
+.info-section {
+    background: linear-gradient(rgba(10, 1, 24, 0.85), rgba(10, 1, 24, 0.85)),
+                url('../static/images/bg2.png');
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+}
+
+/* --- СЕКЦИЯ 3: ОБМЕННИК (bg3.png) --- */
+.exchange-section {
+    background: linear-gradient(rgba(10, 1, 24, 0.9), rgba(10, 1, 24, 0.9)),
+                url('../static/images/bg3.png');
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+}
+
+/* 4. Элементы интерфейса */
+header {
+    background: rgba(18, 0, 36, 0.8);
+    border-bottom: 1px solid rgba(157, 80, 187, 0.3);
+    padding: 30px;
+    text-align: center;
+    backdrop-filter: blur(10px);
+}
+
+.section-title {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 1.5rem;
+    color: var(--main-purple);
+    margin-bottom: 50px;
+    text-shadow: 0 0 10px var(--main-purple);
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    width: 90%;
+    max-width: 1100px;
+}
+
+.stat-card {
+    background: var(--glass-bg);
+    border: 1px solid rgba(157, 80, 187, 0.2);
+    border-radius: 25px;
+    padding: 30px;
+    backdrop-filter: blur(15px);
+    text-align: center;
+    transition: 0.3s;
+}
+
+.stat-card:hover {
+    border-color: var(--main-purple);
+    background: rgba(157, 80, 187, 0.05);
+}
+
+/* 5. Кнопки */
+.button {
+    background: linear-gradient(135deg, var(--main-purple), var(--dark-purple));
+    border: none;
+    border-radius: 30px;
+    padding: 12px 30px;
+    color: white;
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: 0.3s;
+    text-decoration: none;
+    display: inline-block;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 20px var(--main-purple);
+}
+
+.btn-secondary {
+    background: transparent;
+    border: 1px solid var(--main-purple);
+    color: var(--light-purple);
+}
+
+.btn-back {
+    margin-top: 50px;
+    background: transparent;
+    border: 1px solid white;
+    opacity: 0.6;
+}
+
+.btn-back:hover {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.1);
+}
