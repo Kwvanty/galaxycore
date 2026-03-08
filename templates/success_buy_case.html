@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galaxy Core — Подтверждение оплаты</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-overlay: rgba(10, 1, 24, 0.88);
+            --glass: rgba(20, 10, 35, 0.94);
+            --main-purple: #9d50bb;
+            --mc-green: #55ff55;
+            --price-gold: #ffaa00;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(var(--bg-overlay), var(--bg-overlay)), 
+                        url('../static/images/bg.png') no-repeat center center fixed;
+            background-size: cover;
+            color: #ffffff;
+            margin: 0; 
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .back-home {
+            position: fixed; top: 20px; left: 20px; z-index: 1000;
+            text-decoration: none; color: white;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 12px 20px; border-radius: 12px;
+            font-size: 0.8rem; border: 1px solid rgba(157, 80, 187, 0.4);
+            backdrop-filter: blur(10px); transition: 0.3s;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .back-home:hover { background: rgba(157, 80, 187, 0.2); transform: translateX(5px); }
+
+        .main-container {
+            background: var(--glass);
+            border: 2px solid rgba(157, 80, 187, 0.4);
+            border-radius: 25px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        h1 {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 1.2rem;
+            line-height: 1.5;
+            background: linear-gradient(to bottom, #fff, var(--main-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 30px;
+        }
+
+        .user-info {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.7rem;
+            color: #55ffff;
+            margin-bottom: 20px;
+        }
+
+        .item-box {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .item-name {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.9rem;
+            color: var(--price-gold);
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .btn-pay {
+            display: block;
+            width: 100%;
+            background: linear-gradient(135deg, #6e248f, #9d50bb);
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-decoration: none;
+            box-sizing: border-box;
+        }
+        .btn-small {
+            width: auto;
+            min-width: 200px;
+            display: inline-block;
+            margin: 0 auto;
+            padding: 14px 30px;
+        }
+
+        .btn-pay:hover:not(:disabled) {
+            filter: brightness(1.2);
+            box-shadow: 0 0 20px var(--main-purple);
+            transform: translateY(-2px);
+        }
+
+        .btn-pay:disabled {
+            background: #5cfc00;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .footer-note {
+            font-size: 0.75rem;
+            color: #888;
+            margin-top: 20px;
+            line-height: 1.4;
+        }
+
+        #success-section { display: none; }
+        .checkmark {
+            font-size: 60px;
+            color: var(--mc-green);
+            margin-bottom: 20px;
+            text-shadow: 0 0 15px rgba(85, 255, 85, 0.4);
+        }
+
+        .fade-in { animation: fadeIn 0.6s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <a href="/mainstorige" class="back-home">🏠 В магазин</a>
+
+    <div class="main-container">
+        
+        <div id="checkout-section">
+            <h1>ПОДТВЕРЖДЕНИЕ</h1>
+            <div class="user-info">ИГРОК: {{ session['nickname'] }}</div>
+            
+            <div class="item-box">
+                <span class="item-name">{{ item_name }}</span>
+                <span class="item-name">Спасибо за покупку!</span>
+            </div>
+
+            <p class="footer-note">Нажимая кнопку, вы подтверждаете покупку. Товар будет выдан мгновенно.</p>
+            
+            <button id="pay-button" onclick="processPurchase()" class="btn-pay">
+                ПОДТВЕРДИТЬ И ОПЛАТИТЬ
+            </button>
+        </div>
+
+        <div id="success-section" class="fade-in">
+            <div class="checkmark">✔</div>
+            <h1 style="background: linear-gradient(to bottom, #fff, #55ff55); -webkit-background-clip: text; -webkit-text-fill-color: initial; -webkit-background-clip: text; color: transparent;">ОПЛАЧЕНО!</h1>
+            
+            <div class="user-info" style="color: #55ff55;">ТОВАР ВЫДАН</div>
+            
+            <div class="item-box">
+                <span class="item-name" style="color: #fff;">{{ item_name }}</span>
+                <p style="margin: 0; font-size: 0.8rem;">Проверь чат в Minecraft!</p>
+            </div>
+
+            <a href="/mainstorige" class="btn-pay btn-small">ВЕРНУТЬСЯ</a>
+        </div>
+
+    </div>
+
+    <script>
+        function processPurchase() {
+            const btn = document.getElementById('pay-button');
+            
+            // Получаем данные, переданные из Flask (Jinja2)
+            const itemId = "{{ item_id }}";
+            const amount = "{{ amount }}";
+            const price = "{{ price }}";
+            const nickname = "{{ session.get('nickname', '') }}";
+            
+            // Логика выбора эндпоинта на основе флага is_case
+            const isCase = {{ 'true' if is_case else 'false' }};
+            const endpoint = isCase ? '/buy-case' : '/buy-item';
+
+            if (!itemId || itemId === "None" || !nickname) {
+                alert("Ошибка: Недостаточно данных для совершения покупки.");
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerText = "ОБРАБОТКА...";
+
+            fetch(endpoint, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    nickname: nickname,
+                    item: itemId,
+                    amount: amount,
+                    price: price
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    document.getElementById('checkout-section').style.display = 'none';
+                    document.getElementById('success-section').style.display = 'block';
+                } else {
+                    alert("Ошибка: " + (data.message || "Неизвестная ошибка сервера"));
+                    btn.disabled = false;
+                    btn.innerText = "ПОПРОБОВАТЬ СНОВА";
+                }
+            })
+            .catch(err => {
+                console.error("Ошибка сети:", err);
+                btn.disabled = false;
+                btn.innerText = "ОШИБКА СЕТИ";
+            });
+        }
+    </script>
+</body>
+</html>

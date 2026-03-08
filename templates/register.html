@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galaxy Core — Главная</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Press+Start+2P&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-overlay: rgba(15, 5, 25, 0.7);
+            --main-purple: #9d50bb;
+            --error-red: #ff4d4d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: white;
+            overflow: hidden;
+        }
+
+        .hero {
+            height: 100vh;
+            background: linear-gradient(var(--bg-overlay), var(--bg-overlay)),
+                        url('../static/images/bg.png') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-family: 'Press Start 2P', cursive;
+            font-size: clamp(2rem, 6vw, 4rem);
+            margin-bottom: 60px;
+            background: linear-gradient(to bottom, #fff, var(--main-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(157, 80, 187, 0.6);
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+            max-width: 400px;
+            margin-bottom: 30px; 
+        }
+
+        .form-group input {
+            padding: 15px;
+            border-radius: 12px;
+            border: 2px solid rgba(157, 80, 187, 0.4);
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            font-size: 1.1rem;
+            text-align: center;
+            outline: none;
+            backdrop-filter: blur(10px);
+            transition: 0.3s;
+        }
+
+        .form-group input:focus {
+            border-color: var(--main-purple);
+            box-shadow: 0 0 20px rgba(157, 80, 187, 0.5);
+        }
+
+
+        .form-group input.invalid {
+            border-color: var(--error-red);
+            box-shadow: 0 0 10px rgba(255, 77, 77, 0.3);
+        }
+
+
+        #error-message {
+            color: var(--error-red);
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            height: 20px; 
+            font-weight: 600;
+        }
+
+        .btn {
+            padding: 18px 35px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            min-width: 220px;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            background: linear-gradient(135deg, #11ff00, #73ec5e);
+            box-shadow: 0 5px 15px rgba(0, 255, 64, 0.4);
+            transition: 0.3s;
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-5px);
+            filter: brightness(1.1);
+        }
+    </style>
+</head>
+<body>
+
+<div class="hero">
+    <h1>GALAXY CORE</h1>
+
+    <div class="form-group">
+        <input type="text" id="nickname" placeholder="Введите игровой никнейм">
+        <input type="email" id="email" placeholder="Введите электронную почту">
+        <input type="password" id="password" placeholder="Введите пароль">
+    </div>
+
+    <div id="error-message"></div>
+
+    <button type="button" class="btn" onclick="register()">Зарегистрироваться</button>
+</div>
+
+<script>
+function register() {
+    const data = {
+        nickname: document.getElementById('nickname').value,
+        email: document.getElementById('email').value,
+        password: document.getElementById('password').value
+    };
+
+    fetch('/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.status === 'success') {
+            alert('Регистрация прошла!');
+            window.location.href = '/login';
+        } else {
+            alert('Ошибка: ' + data.message);
+        }
+    });
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galaxy Core — Покупка Планеток</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-overlay: rgba(5, 10, 25, 0.92);
+            --glass: rgba(15, 30, 60, 0.95);
+            --planet-blue: #00d2ff;
+            --planet-cyan: #3a7bd5;
+            --mc-gold: #ffaa00;
+            --premium-purple: #a333ff;
+            --cheap-green: #55ff55;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(var(--bg-overlay), var(--bg-overlay)), 
+                        url('../static/images/bg.png') no-repeat center center fixed;
+            background-size: cover;
+            color: #ffffff;
+            margin: 0; padding: 0;
+            min-height: 100vh;
+        }
+
+        .back-home {
+            position: fixed; top: 20px; left: 20px; z-index: 1000;
+            text-decoration: none; color: white;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 12px 20px; border-radius: 12px;
+            font-size: 0.8rem; border: 1px solid var(--planet-blue);
+            backdrop-filter: blur(10px); transition: 0.3s;
+            display: flex; align-items: center; gap: 8px;
+        }
+
+        .back-home:hover { background: rgba(0, 210, 255, 0.2); transform: translateX(5px); }
+
+        header {
+            padding: 60px 20px; text-align: center;
+            backdrop-filter: blur(5px); border-bottom: 2px solid var(--planet-blue);
+            margin-bottom: 50px;
+        }
+
+        header h1 {
+            font-family: 'Press Start 2P', cursive; font-size: clamp(1.5rem, 5vw, 2.2rem); margin: 0;
+            background: linear-gradient(to bottom, #fff, var(--planet-blue));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 15px rgba(0, 210, 255, 0.5);
+        }
+
+        .user-tag { margin-top: 15px; font-family: 'Press Start 2P', cursive; font-size: 0.7rem; color: #55ffff; }
+
+        .shop-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px 80px 20px;
+        }
+
+        .currency-card {
+            background: var(--glass);
+            border: 2px solid rgba(0, 210, 255, 0.1);
+            border-radius: 25px;
+            padding: 30px 15px;
+            width: 260px;
+            text-align: center;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            backdrop-filter: blur(15px);
+            position: relative;
+        }
+
+        .currency-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--planet-blue);
+            box-shadow: 0 15px 40px rgba(0, 210, 255, 0.2);
+        }
+
+        .icon {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            display: block;
+            filter: drop-shadow(0 0 10px var(--planet-blue));
+        }
+
+        .amount {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 1rem;
+            color: #fff;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .sub-text {
+            color: var(--planet-blue);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .price-tag {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--mc-gold);
+            margin-bottom: 25px;
+            display: block;
+        }
+
+        .buy-button {
+            display: block;
+            background: linear-gradient(135deg, var(--planet-cyan), var(--planet-blue));
+            color: white;
+            text-decoration: none;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: 0.3s;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+        }
+
+        .buy-button:hover {
+            filter: brightness(1.2);
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.4);
+        }
+
+        /* Бейджики */
+        .badge {
+            position: absolute; top: 10px; right: 10px;
+            font-size: 0.55rem; font-weight: bold; padding: 4px 8px; border-radius: 5px;
+        }
+
+        .badge-new { background: var(--cheap-green); color: black; }
+        .badge-pop { background: var(--mc-gold); color: black; }
+        .badge-elite { background: var(--premium-purple); color: white; }
+
+        /* Элитный стиль */
+        .elite { border-color: var(--premium-purple); }
+        .elite .buy-button { background: linear-gradient(135deg, var(--premium-purple), #6e248f); }
+    </style>
+</head>
+<body>
+
+<a href="/mainstorige" class="back-home">🏠 На главную</a>
+
+<header>
+    <h1>GALAXY PLANETS</h1>
+    <div id="player-display" class="user-tag"></div>
+</header>
+
+<div class="shop-container">
+
+    <div class="currency-card">
+        <span class="badge badge-new">START</span>
+        <span class="icon">☄️</span>
+        <span class="amount">100</span>
+        <span class="sub-text">Планеток</span>
+        <span class="price-tag">0.15 USD</span>
+        <a href="/success_buy?item=planet&amount=500&price=0.12" class="buy-button">Купить</a>
+    </div>
+    
+    <div class="currency-card">
+        <span class="badge badge-new">START</span>
+        <span class="icon">☄️</span>
+        <span class="amount">500</span>
+        <span class="sub-text">Планеток</span>
+        <span class="price-tag">0.75 USD</span>
+        <a href="/success_buy?item=planet&amount=500&price=0.55" class="buy-button">Купить</a>
+    </div>
+
+    <div class="currency-card">
+        <span class="icon">💎</span>
+        <span class="amount">1,000</span>
+        <span class="sub-text">Планеток</span>
+        <span class="price-tag">1.50 USD</span>
+        <a href="/success_buy?item=planet&amount=1000&price=1.00" class="buy-button">Купить</a>
+    </div>
+
+    <div class="currency-card">
+        <span class="badge badge-pop">POPULAR</span>
+        <span class="icon">✨</span>
+        <span class="amount">2,500</span>
+        <span class="sub-text">Планеток</span>
+        <span class="price-tag">3.34 USD</span>
+        <a href="/success_buy?item=planet&amount=2500&price=2.34" class="buy-button">Купить</a>
+    </div>
+
+    <div class="currency-card elite">
+        <span class="icon">🌌</span>
+        <span class="amount">3,700</span>
+        <span class="sub-text">Планеток</span>
+        <span class="price-tag">5 USD</span>
+        <a href="/success_buy?item=planet&amount=3700&price=3.30" class="buy-button">Купить</a>
+    </div>
+
+        <div class="currency-card elite">
+        <span class="badge badge-elite">ELITE</span>
+        <span class="icon">🌌</span>
+        <span class="amount">4,500</span>
+        <span class="sub-text">Планеток</span>
+        <span class="price-tag">6 USD</span>
+        <a href="/success_buy?item=planet&amount=3700&price=3,70" class="buy-button">Купить</a>
+    </div>
+
+</div>
+
+<script>
+    window.onload = function() {
+        const nick = localStorage.getItem('playerNick');
+        document.getElementById('player-display').innerText = nick ? "БАЛАНС ДЛЯ: " + nick.toUpperCase() : "ГОСТЬ ГАЛАКТИКИ";
+    };
+    
+</script>
+
+</body>
+</html>

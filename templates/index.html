@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galaxy Core — Главная</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-overlay: rgba(15, 5, 25, 0.7);
+            --main-purple: #9d50bb;
+            --planets-cyan: #00d2ff;
+            --admin-gold: #ffcc00; /* Цвет для админа */
+        }
+
+        body, html {
+            margin: 0; padding: 0; height: 100%;
+            font-family: 'Poppins', sans-serif;
+            color: white; overflow: hidden;
+        }
+
+        .hero-section {
+            height: 100vh;
+            background: linear-gradient(var(--bg-overlay), var(--bg-overlay)), 
+                        url('../static/images/bg.png') no-repeat center center fixed;
+            background-size: cover;
+            display: flex; 
+            flex-direction: column;
+            justify-content: center; 
+            align-items: center; 
+            text-align: center;
+        }
+
+        h1 {
+            font-family: 'Press Start 2P', cursive;
+            font-size: clamp(1.5rem, 6vw, 3.5rem);
+            margin-bottom: 50px;
+            background: linear-gradient(to bottom, #fff, var(--main-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(157, 80, 187, 0.6);
+        }
+
+        .nav-container {
+            display: flex;
+            flex-direction: column; 
+            gap: 20px;              
+            align-items: center;    
+            width: 100%;
+        }
+
+        .btn {
+            padding: 18px 35px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: white;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            width: 280px;           
+            border: none;
+            cursor: pointer;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        /* Кнопка Регистрации */
+        .btn-reg {
+            background: linear-gradient(135deg, #ff0000, #ec5e5e);
+            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.4);
+        }
+        
+        /* Кнопка Логина */
+        .btn-log {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(5px);
+        }
+
+        /* Кнопка Админа */
+        .btn-admin {
+            background: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+            color: #000;
+            margin-top: 10px; /* Небольшой отступ сверху, чтобы отделить от игровых кнопок */
+            box-shadow: 0 5px 15px rgba(255, 204, 0, 0.3);
+            font-weight: 700;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            filter: brightness(1.2);
+        }
+
+        .btn-admin:hover {
+            box-shadow: 0 8px 20px rgba(255, 204, 0, 0.5);
+            transform: translateY(-5px);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="hero-section">
+        <h1>GALAXY CORE</h1>
+        
+        <div class="nav-container">
+            <button onclick="window.location.href='login'" class="btn btn-log">Войти</button>
+            <button onclick="window.location.href='register'" class="btn btn-reg">Зарегистрироваться</button>
+            <button onclick="window.location.href='/admin-login'" class="btn btn-admin">Войти как админ</button>
+        </div>
+    </div>
+
+</body>
+</html>

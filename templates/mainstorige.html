@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galaxy Core — Главная</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-overlay: rgba(15, 5, 25, 0.7);
+            --main-purple: #9d50bb;
+            --accent-gold: #ffcc00;
+        }
+
+        body, html {
+            margin: 0; padding: 0; height: 100%;
+            font-family: 'Poppins', sans-serif;
+            color: white; overflow: hidden;
+            background-color: #0a0118;
+        }
+
+        .main-wrapper {
+            height: 100vh;
+            width: 100%;
+            transition: transform 0.8s cubic-bezier(0.85, 0, 0.15, 1);
+            position: relative;
+        }
+
+        /* Состояния смещения */
+        .main-wrapper.shift-info { transform: translateY(-100vh); }
+        .main-wrapper.shift-exchange { transform: translateY(-200vh); }
+
+        .page-section {
+            height: 100vh; width: 100%;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center; text-align: center;
+        }
+
+        /* --- СЕКЦИИ --- */
+        .hero-section {
+            background: linear-gradient(var(--bg-overlay), var(--bg-overlay)), 
+                        url('../static/images/bg.png') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        .info-section {
+            background: linear-gradient(rgba(10, 1, 24, 0.85), rgba(10, 1, 24, 0.85)), 
+                        url('../static/images/bg2.png') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        .exchange-section {
+            background: linear-gradient(rgba(10, 1, 24, 0.85), rgba(10, 1, 24, 0.85)), 
+                        url('../static/images/bg3.png') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        .top-right-nav {
+            position: absolute; top: 25px; right: 25px;
+            z-index: 1000; display: flex; align-items: center; gap: 15px;
+        }
+
+        .profile-link {
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(157, 80, 187, 0.4);
+            padding: 10px 20px; border-radius: 15px;
+            text-decoration: none; color: white;
+            display: flex; align-items: center; gap: 10px;
+            backdrop-filter: blur(10px); transition: 0.3s;
+        }
+
+        .profile-link:hover { background: var(--main-purple); transform: translateY(-2px); }
+
+        h1, .info-title {
+            font-family: 'Press Start 2P', cursive;
+            background: linear-gradient(to bottom, #fff, var(--main-purple));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        
+        h1 { font-size: clamp(2rem, 8vw, 4rem); margin-bottom: 40px; }
+        .info-title { font-size: 1.5rem; margin-bottom: 30px; }
+
+        .nav-container { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
+
+        .btn {
+            padding: 18px 35px; border-radius: 12px;
+            text-decoration: none; color: white; font-weight: 600;
+            text-transform: uppercase; font-size: 0.85rem;
+            transition: 0.3s; min-width: 220px; border: none; cursor: pointer;
+        }
+
+        .btn-shop { background: linear-gradient(135deg, #6e248f, #9d50bb); }
+        .btn-planets { background: linear-gradient(135deg, #00d2ff, #3a7bd5); }
+        .btn-casekey { background: linear-gradient(135deg, #ff0000, #ff8800); }
+        .btn-other { background: linear-gradient(135deg, #248f40, #50bb73); }
+
+        /* Группа нижних кнопок переходов */
+        .bottom-nav-group {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-more {
+            background: rgba(157, 80, 187, 0.2);
+            border: 1px solid var(--main-purple);
+            padding: 8px 20px;
+            min-width: 150px;
+            font-size: 0.7rem;
+        }
+
+        .btn:hover { transform: translateY(-5px); filter: brightness(1.1); }
+
+        .ip-copy {
+            margin-top: 40px; font-size: 0.9rem; font-weight: 600;
+            color: var(--accent-gold); cursor: pointer;
+            letter-spacing: 1px;
+        }
+
+        .stats-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px; width: 90%; max-width: 1200px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(157, 80, 187, 0.3);
+            border-radius: 20px; padding: 25px; backdrop-filter: blur(10px);
+        }
+
+        .stat-card h3 {
+            font-family: 'Press Start 2P', cursive; font-size: 0.7rem;
+            color: var(--accent-gold); margin-bottom: 15px;
+        }
+
+        .region-list {
+            text-align: left; font-size: 0.85rem; line-height: 1.8;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 5px;
+        }
+        .region-list span { color: #aaa; font-size: 0.75rem; }
+    </style>
+</head>
+<body>
+
+    <div class="main-wrapper" id="mainWrapper">
+        
+        <section class="page-section hero-section">
+            <div class="top-right-nav">
+                {% if session.nickname %}
+                    <a href="/profile" class="profile-link">
+                        <img src="https://mc-heads.net/avatar/{{ session.nickname }}/24" alt="head" style="border-radius: 4px;">
+                        <span>{{ session.nickname }}</span>
+                    </a>
+                {% else %}
+                    <a href="/login" class="login-btn">Войти</a>
+                {% endif %}
+            </div>
+
+            <h1>GALAXY CORE</h1>
+
+            <div class="nav-container">
+                <button onclick="window.location.href='/donats.html'" class="btn btn-shop">🛒 Магазин донатов</button>
+                <button onclick="window.location.href='/planets.html'" class="btn btn-planets">🪐 Магазин планеток</button>
+                <button onclick="window.location.href='/casekey.html'" class="btn btn-casekey">🗝️ Магазин ключей</button>
+            </div>
+
+            <div class="ip-copy" onclick="copyIp()">IP: GALAXYCORE.POLIT.DAY</div>
+            
+            <div class="bottom-nav-group">
+                <button onclick="scrollToSection('info')" class="btn btn-more">ПРО СЕРВЕР ↓</button>
+                <button onclick="scrollToSection('exchange')" class="btn btn-more" style="border-color: #00d2ff;">ОБМЕННИК ↓</button>
+            </div>
+        </section>
+
+        <section class="page-section info-section">
+            <h2 class="info-title">ДЕТАЛИ МИРА</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>СТАТУС</h3>
+                    <p id="online-count" style="font-size: 1.5rem; font-weight: 800; color: #00ffcc;">Загрузка...</p>
+                    <p style="font-size: 0.8rem; opacity: 0.6;">Версия: 1.16.5 - 1.20.x</p>
+                </div>
+
+                <div class="stat-card">
+                    <h3>РЕГИОН-БЛОКИ</h3>
+                    <div class="region-list">
+                        <div>⚫ Угольный <span>(2x2)</span></div>
+                        <div>🟤 Медный <span>(4x4)</span></div>
+                        <div>⚪ Железный <span>(6x6)</span></div>
+                        <div>🟡 Золотой <span>(9x9)</span></div>
+                        <div>💎 Алмазный <span>(12x12)</span></div>
+                        <div>🟢 Изумрудный <span>(17x17)</span></div>
+                        <div>🟣 Незеритовый <span>(21x21)</span></div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <h3>ТОП ИГРОКОВ</h3>
+                    <p>1. Kwvanty<br>2. Player_1<br>3. Admin</p>
+                </div>
+            </div>
+
+            <button onclick="scrollToSection('hero')" class="btn" style="margin-top: 40px; background: none; border: 1px solid white; min-width: 150px;">↑ Назад</button>
+        </section>
+
+        <section class="page-section exchange-section">
+            <h2 class="info-title">ОТДЕЛ ОБМЕНА</h2>
+            
+            <div class="nav-container">
+                <button onclick="window.location.href='/exchange-donate.html'" class="btn btn-shop">💎 Обмен доната</button>
+                
+                <button onclick="window.location.href='/exchange-planets.html'" class="btn btn-planets">🪐 Обмен планеток</button>
+                
+                <button onclick="window.location.href='/exchange-other.html'" class="btn btn-other">🤝 Другие способы</button>
+            </div>
+
+            <button onclick="scrollToSection('hero')" class="btn" style="margin-top: 60px; background: none; border: 1px solid white; min-width: 150px;">↑ Назад</button>
+        </section>
+
+    </div>
+
+    <script>
+        function scrollToSection(section) {
+            const wrapper = document.getElementById('mainWrapper');
+            // Сбрасываем все классы смещения
+            wrapper.classList.remove('shift-info', 'shift-exchange');
+            
+            if (section === 'info') {
+                wrapper.classList.add('shift-info');
+            } else if (section === 'exchange') {
+                wrapper.classList.add('shift-exchange');
+            }
+        }
+
+        function copyIp() {
+            navigator.clipboard.writeText("galaxycore.polit.day");
+            alert("IP скопирован!");
+        }
+
+        async function fetchOnline() {
+            try {
+                const res = await fetch('https://api.mcsrvstat.us/2/galaxycore.polit.day');
+                const data = await res.json();
+                document.getElementById('online-count').innerText = data.players.online + " / " + data.players.max;
+            } catch {
+                document.getElementById('online-count').innerText = "OFFLINE";
+            }
+        }
+        fetchOnline();
+    </script>
+</body>
+</html>
