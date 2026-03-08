@@ -1,2 +1,4 @@
 flask
 gunicorn
+mcrcon
+flask_sqlalchemy
