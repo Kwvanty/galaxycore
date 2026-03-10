@@ -3,7 +3,7 @@ from flask import Flask, render_template, request, jsonify, session, redirect, u
 from flask_sqlalchemy import SQLAlchemy
 from mcrcon import MCRcon
 import os
-from datetime import datetime # Добавили для даты покупки
+from datetime import datetime
 
 app = Flask(__name__)
 app.secret_key = 'super-secret-key-123' 
@@ -35,7 +35,7 @@ with app.app_context():
 
 # --- ДАННЫЕ RCON ---
 RCON_HOST = '77.42.49.25' 
-RCON_PASS = 'test123'
+RCON_PASS = 'JxDSNzMFUe'
 RCON_PORT = 25755
 
 def run_minecraft_command(command):
@@ -206,7 +206,9 @@ def casekey_page(): return render_template("casekey.html")
 
 @app.route("/success_buy")
 def success_buy_page():
-    if 'nickname' not in session: return redirect(url_for('login'))
+    if 'nickname' not in session: 
+        return redirect(url_for('login'))
+        
     item_id = request.args.get('item')   
     item_name = request.args.get('name') 
     amount = request.args.get('amount', '1') 
@@ -214,8 +216,9 @@ def success_buy_page():
     
     return render_template("success_buy.html", 
                            item_name=item_name or item_id.upper(), 
-                           price=price, item_id=item_id, amount=amount,
-                           is_case=False)
+                           price=price, 
+                           item_id=item_id, 
+                           amount=amount)
 
 @app.route("/success_buy_case")
 def success_buy_case_page():
@@ -230,29 +233,24 @@ def success_buy_case_page():
                            price=price, item_id=item_id, amount=amount,
                            is_case=True) 
 
-@app.route('/buy-item', methods=['POST'])
-def buy_item_logic():
+@app.route('/check-before-pay', methods=['POST'])
+def check_before_pay():
     data = request.json
-    nick = data.get('nickname')
-    item = data.get('item')
-    amount = data.get('amount', 1)
-    price = data.get('price', 0)
-
-    item_clean = str(item).lower().strip()
-    if item_clean in ['planet', 'planets']:
-        command = f"p give {nick} {amount}"
-        announcement = f"say &eИгрок {nick} получил {amount} планет!"
-    else:
-        command = f"lp user {nick} parent set {item_clean}"
-        announcement = f"say &eИгрок {nick} получил {item_clean.upper()}!"
-
-    result = run_minecraft_command(command)
-    if result is not None:
-        run_minecraft_command(announcement)
-        save_purchase_to_db(nick, item_clean, amount, price)
-        return jsonify({"status": "success"})
-    return jsonify({"status": "error", "message": "RCON Error"}), 500
-
+    nickname = data.get('nickname')
+    
+    # ПРОВЕРКА: Команда 'list' покажет, в сети ли игрок
+    # Мы используем RCON_HOST (77.42.49.25) и RCON_PORT (25755)
+    response = run_minecraft_command("list")
+    
+    if response:
+        # Если ответ от RCON пришел, проверяем, есть ли ник в списке игроков
+        if nickname.lower() in response.lower():
+            return jsonify({"status": "success"})
+        else:
+            return jsonify({"status": "error", "message": "Зайдите на сервер, чтобы купить товар!"})
+    
+    # Если response равен None, значит RCON вообще не ответил
+    return jsonify({"status": "error", "message": "Сервер Minecraft недоступен (RCON Error)"})
 # --- ОБРАБОТКА ПОКУПКИ КЕЙСОВ ---
 @app.route('/buy-case', methods=['POST'])
 def buy_case_logic():
@@ -315,4 +313,4 @@ def save_purchase_to_db(nick, item, amount, price):
     except Exception as e:
         print(f"Ошибка БД: {e}")
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
