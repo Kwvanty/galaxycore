@@ -117,21 +117,25 @@
             display: block;
             background: linear-gradient(135deg, var(--planet-cyan), var(--planet-blue));
             color: white;
-            text-decoration: none;
+            border: none;
+            width: 100%;
+            cursor: pointer;
             padding: 12px;
             border-radius: 12px;
             font-weight: 600;
             transition: 0.3s;
             text-transform: uppercase;
             font-size: 0.8rem;
+            font-family: 'Poppins', sans-serif;
         }
 
-        .buy-button:hover {
+        .buy-button:hover:not(:disabled) {
             filter: brightness(1.2);
             box-shadow: 0 0 15px rgba(0, 210, 255, 0.4);
         }
+        
+        .buy-button:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        /* Бейджики */
         .badge {
             position: absolute; top: 10px; right: 10px;
             font-size: 0.55rem; font-weight: bold; padding: 4px 8px; border-radius: 5px;
@@ -141,7 +145,6 @@
         .badge-pop { background: var(--mc-gold); color: black; }
         .badge-elite { background: var(--premium-purple); color: white; }
 
-        /* Элитный стиль */
         .elite { border-color: var(--premium-purple); }
         .elite .buy-button { background: linear-gradient(135deg, var(--premium-purple), #6e248f); }
     </style>
@@ -163,7 +166,7 @@
         <span class="amount">100</span>
         <span class="sub-text">Планеток</span>
         <span class="price-tag">0.15 USD</span>
-        <a href="/success_buy?item=planet&amount=500&price=0.12" class="buy-button">Купить</a>
+        <button onclick="handlePurchase('planet', '100 Планеток', '0.15', 100)" class="buy-button">Купить</button>
     </div>
     
     <div class="currency-card">
@@ -172,7 +175,7 @@
         <span class="amount">500</span>
         <span class="sub-text">Планеток</span>
         <span class="price-tag">0.75 USD</span>
-        <a href="/success_buy?item=planet&amount=500&price=0.55" class="buy-button">Купить</a>
+        <button onclick="handlePurchase('planet', '500 Планеток', '0.75', 500)" class="buy-button">Купить</button>
     </div>
 
     <div class="currency-card">
@@ -180,7 +183,7 @@
         <span class="amount">1,000</span>
         <span class="sub-text">Планеток</span>
         <span class="price-tag">1.50 USD</span>
-        <a href="/success_buy?item=planet&amount=1000&price=1.00" class="buy-button">Купить</a>
+        <button onclick="handlePurchase('planet', '1,000 Планеток', '1.50', 1000)" class="buy-button">Купить</button>
     </div>
 
     <div class="currency-card">
@@ -189,34 +192,68 @@
         <span class="amount">2,500</span>
         <span class="sub-text">Планеток</span>
         <span class="price-tag">3.34 USD</span>
-        <a href="/success_buy?item=planet&amount=2500&price=2.34" class="buy-button">Купить</a>
+        <button onclick="handlePurchase('planet', '2,500 Планеток', '3.34', 2500)" class="buy-button">Купить</button>
     </div>
 
     <div class="currency-card elite">
         <span class="icon">🌌</span>
         <span class="amount">3,700</span>
         <span class="sub-text">Планеток</span>
-        <span class="price-tag">5 USD</span>
-        <a href="/success_buy?item=planet&amount=3700&price=3.30" class="buy-button">Купить</a>
+        <span class="price-tag">5.00 USD</span>
+        <button onclick="handlePurchase('planet', '3,700 Планеток', '5.00', 3700)" class="buy-button">Купить</button>
     </div>
 
-        <div class="currency-card elite">
+    <div class="currency-card elite">
         <span class="badge badge-elite">ELITE</span>
         <span class="icon">🌌</span>
         <span class="amount">4,500</span>
         <span class="sub-text">Планеток</span>
-        <span class="price-tag">6 USD</span>
-        <a href="/success_buy?item=planet&amount=3700&price=3,70" class="buy-button">Купить</a>
+        <span class="price-tag">6.00 USD</span>
+        <button onclick="handlePurchase('planet', '4,500 Планеток', '6.00', 4500)" class="buy-button">Купить</button>
     </div>
 
 </div>
 
 <script>
+    const playerNick = "{{ session.get('nickname', '') }}";
+
+    function handlePurchase(itemId, itemName, price, amount) {
+        if (!playerNick || playerNick === "None" || playerNick === "") {
+            alert("Пожалуйста, сначала авторизуйтесь!");
+            return;
+        }
+
+        const btn = event.target;
+        btn.disabled = true;
+        btn.innerText = "ПРОВЕРКА...";
+
+        fetch('/check-before-pay', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ nickname: playerNick })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 'success') {
+                // Переходим на страницу успеха с данными о планетах
+                window.location.href = `/success_buy?item=${itemId}&name=${itemName}&price=${price}&amount=${amount}`;
+            } else {
+                alert("ОШИБКА: " + data.message);
+                btn.disabled = false;
+                btn.innerText = "КУПИТЬ";
+            }
+        })
+        .catch(err => {
+            alert("Сервер недоступен.");
+            btn.disabled = false;
+            btn.innerText = "КУПИТЬ";
+        });
+    }
+
     window.onload = function() {
-        const nick = localStorage.getItem('playerNick');
-        document.getElementById('player-display').innerText = nick ? "БАЛАНС ДЛЯ: " + nick.toUpperCase() : "ГОСТЬ ГАЛАКТИКИ";
+        const display = document.getElementById('player-display');
+        display.innerText = playerNick ? "БАЛАНС ДЛЯ: " + playerNick.toUpperCase() : "ГОСТЬ ГАЛАКТИКИ";
     };
-    
 </script>
 
 </body>
