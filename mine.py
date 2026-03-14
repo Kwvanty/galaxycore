@@ -34,9 +34,9 @@ with app.app_context():
     db.create_all()
 
 # --- ДАННЫЕ RCON ---
-RCON_HOST = '77.42.49.25' 
+RCON_HOST = '65.108.21.144' 
 RCON_PASS = 'JxDSNzMFUe'
-RCON_PORT = 25755
+RCON_PORT = 25713
 
 def run_minecraft_command(command):
     try:
